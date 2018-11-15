@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+	<select id="userList" resultType="com.spring.board.user.userDto">
+		SELECT *
+		FROM T_USER
+		WHERE RIDA = 85
+		ORDER BY U_UID ASC
+	</select>
+	
+	<delete id="userDelete" parameterType="java.util.HashMap">
+		DELETE FROM T_USER WHERE 1 = 1
+		<choose>
+			<when test="uidList.size != 0">
+				AND U_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</delete>
+	
+	<select id="userSequence" resultType="java.lang.Integer">
+		SELECT USER_GRID_H_UID.Nextval
+		FROM DUAL
+	</select>
+	
+	<insert id="userInsert" parameterType="com.spring.board.user.userDto">
+		   INSERT INTO
+		      T_USER
+		   VALUES(
+			      #{u_uid},
+			      #{id},
+			      #{name},
+			      #{password},
+			      #{rida}
+			   )
+	</insert>
+	
+	<select id="oldUserList" resultType="com.spring.board.user.userDto">
+		SELECT *
+		FROM T_USER
+		WHERE RIDA != 85
+		ORDER BY RIDA ASC
+	</select>
+	
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="payoff">
+	<select id="payoffList" resultType="com.spring.board.payoff.payoffDto">
+		SELECT A.*,
+	          (SELECT COUNT(1) FROM PAY_USER C WHERE C.PAY_M_UID = A.PAY_M_UID) AS PAY_USER_COUNT
+	    FROM PAY_MASTER A
+	    ORDER BY REG_DATE DESC
+	</select>
+	
+	<insert id="payoffInsert" parameterType="java.lang.String">
+		   INSERT INTO
+		      PAY_MASTER(pay_m_uid, status, reg_id, reg_date, mod_id, mod_date, total_amount, pay_title, no)
+		   VALUES(
+			      (select max(pay_m_uid) + 1 from PAY_MASTER),
+			      'ENT',
+			      'ADMIN',
+			      SYSDATE,
+			      'ADMIN',
+			      SYSDATE,
+			      0,
+			      #{pay_title},
+			      1
+			   )
+	</insert>
+	
+	<delete id="payuserDelete" parameterType="java.util.HashMap">
+		DELETE FROM PAY_USER WHERE 1 = 1
+		<choose>
+			<when test="uidList.size != 0">
+				AND PAY_M_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</delete>
+	
+	<delete id="payOffDelete" parameterType="java.util.HashMap">
+		DELETE FROM PAY_MASTER WHERE 1 = 1
+		<choose>
+			<when test="uidList.size != 0">
+				AND PAY_M_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</delete>
+	
+	
+	<select id="payoffGetOne" parameterType="java.lang.String" resultType="com.spring.board.payoff.payoffDto">
+		SELECT A.*
+	    FROM PAY_MASTER A
+	    WHERE PAY_M_UID = #{pay_m_uid}
+	</select>
+	
+	
+	<update id="payoffUpdate" parameterType="com.spring.board.payoff.payoffDto" >
+	  	 UPDATE PAY_MASTER
+		    SET PAY_TITLE   = #{pay_title},
+				ONE_PLACE   = #{one_place},
+				ONE_AMOUNT  = #{one_amount},
+				TWO_PLACE   = #{two_place},
+				TWO_AMOUNT  = #{two_amount},
+				TRE_PLACE   = #{tre_place},
+				TRE_AMOUNT  = #{tre_amount},
+				FOR_PLACE   = #{for_place},
+				FOR_AMOUNT  = #{for_amount},
+				FIV_PLACE   = #{fiv_place},
+				FIV_AMOUNT  = #{fiv_amount},
+				NO          = #{no},
+				TOTAL_AMOUNT = DECODE(#{total_amount}, 0 , ONE_AMOUNT + TWO_AMOUNT + TRE_AMOUNT + FOR_AMOUNT + FIV_AMOUNT, #{total_amount})
+	      WHERE PAY_M_UID =  #{pay_m_uid}       
+	</update>
+	
+	<select id="payoffUserGet" parameterType="java.lang.String" resultType="com.spring.board.user.userDto">
+		SELECT A.*
+	      FROM T_USER A
+	      WHERE NOT EXISTS (SELECT 'O' FROM PAY_USER U WHERE U.PAY_M_UID = #{pay_m_uid} AND U.U_UID = A.U_UID )
+	</select>
+	<!-- mysql
+	<insert id="payUserUpdate" parameterType="java.util.HashMap">
+		   <if test="uList.size != 0">
+		   		INSERT INTO PAY_USER(
+		   		    PAY_U_UID,
+		   		    PAY_M_UID,
+		   		    U_UID) VALUES
+		   <foreach collection="uList" item="item" index="index" separator=",">		       
+		   			(
+		               (SELECT USER_GRID_H_UID.Nextval FROM DUAL),
+		   			   #{item.pay_m_uid},
+		   			   #{item.u_uid}
+		   			)
+		   </foreach>			
+		   </if>
+	</insert>
+	 -->
+	
+	<insert id="payUserUpdate" parameterType="java.util.HashMap">
+		   <if test="uList.size != 0">
+			   <foreach collection="uList" item="item" index="index" open="INSERT ALL " separator="" close="SELECT * FROM DUAL" >		       
+			   	  INTO PAY_USER(
+			   		    PAY_U_UID,
+			   		    PAY_M_UID,
+			   		    U_UID) VALUES
+			   			(
+			               #{item.pay_u_uid},
+			   			   #{item.pay_m_uid},
+			   			   #{item.u_uid}
+			   			)
+			   </foreach>			
+		   </if>
+	</insert>
+	
+	<select id="payoffUserList" parameterType="java.lang.String" resultType="com.spring.board.payoff.payoffUserDto">
+		SELECT A.*, B.NAME, B.RIDA
+	    FROM PAY_USER A, T_USER B
+	    WHERE PAY_M_UID = #{pay_m_uid}
+	    AND  A.U_UID = B.U_UID
+	    ORDER BY FIV_MEAL, FOR_MEAL, TRE_MEAL, TWO_MEAL, ONE_MEAL, B.RIDA DESC
+	</select>
+	
+	<update id="payoffUserStatusUpdate" parameterType="java.util.HashMap" >
+	  	<if test="uList.size != 0">
+	  		UPDATE PAY_USER
+	  		<choose>   
+	  		   <when test='"1".equals(user_no)'>
+	  		   SET ONE_MEAL = #{mealCode}
+	  		   </when>
+	  		   <when test='"2".equals(user_no)'>
+	  		   SET TWO_MEAL = #{mealCode}
+	  		   </when>
+	  		   <when test='"3".equals(user_no)'>
+	  		   SET TRE_MEAL = #{mealCode}
+	  		   </when>
+	  		   <when test='"4".equals(user_no)'>
+	  		   SET FOR_MEAL = #{mealCode}
+	  		   </when>
+	  		   <when test='"5".equals(user_no)'>
+	  		   SET FIV_MEAL = #{mealCode}
+	  		   </when>
+	  		</choose>      
+		     WHERE PAY_U_UID IN
+		     	<foreach collection="uList" item="item" index="index" separator="," open="(" close=")">
+		     		#{item}
+		     	</foreach>
+	  	</if>   
+	</update>
+	
+	<delete id="payoffUsersDelete" parameterType="java.util.HashMap">
+		DELETE FROM PAY_USER WHERE 1 = 1
+		<choose>
+			<when test="uidList.size != 0">
+				AND PAY_U_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</delete>
+	
+	<update id="payoffCfmUpdate" parameterType="java.util.HashMap">
+		UPDATE PAY_MASTER
+		   SET STATUS = 'CFM'
+		<choose>
+			<when test="uidList.size != 0">
+				WHERE PAY_M_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</update>
+	
+	
+</mapper>
