@@ -22,8 +22,8 @@
 	</delete>
 	
 	<select id="userSequence" resultType="java.lang.Integer">
-		SELECT USER_GRID_H_UID.Nextval
-		FROM DUAL
+		SELECT COALESCE(MAX(U_UID), 0) + 1
+		FROM T_USER
 	</select>
 	
 	<insert id="userInsert" parameterType="com.spring.board.user.userDto">

@@ -11,14 +11,13 @@
 	
 	<insert id="payoffInsert" parameterType="java.lang.String">
 		   INSERT INTO
-		      PAY_MASTER(pay_m_uid, status, reg_id, reg_date, mod_id, mod_date, total_amount, pay_title, no)
+		      PAY_MASTER(status, reg_id, reg_date, mod_id, mod_date, total_amount, pay_title, no)
 		   VALUES(
-			      (select max(pay_m_uid) + 1 from PAY_MASTER),
 			      'ENT',
 			      'ADMIN',
-			      SYSDATE,
+			      CURDATE(),
 			      'ADMIN',
-			      SYSDATE,
+			      CURDATE(),
 			      0,
 			      #{pay_title},
 			      1
@@ -71,7 +70,7 @@
 				FIV_PLACE   = #{fiv_place},
 				FIV_AMOUNT  = #{fiv_amount},
 				NO          = #{no},
-				TOTAL_AMOUNT = DECODE(#{total_amount}, 0 , ONE_AMOUNT + TWO_AMOUNT + TRE_AMOUNT + FOR_AMOUNT + FIV_AMOUNT, #{total_amount})
+				TOTAL_AMOUNT = ONE_AMOUNT + TWO_AMOUNT + TRE_AMOUNT + FOR_AMOUNT + FIV_AMOUNT
 	      WHERE PAY_M_UID =  #{pay_m_uid}       
 	</update>
 	
@@ -80,24 +79,23 @@
 	      FROM T_USER A
 	      WHERE NOT EXISTS (SELECT 'O' FROM PAY_USER U WHERE U.PAY_M_UID = #{pay_m_uid} AND U.U_UID = A.U_UID )
 	</select>
-	<!-- mysql
+	
+	<!-- mysql -->
 	<insert id="payUserUpdate" parameterType="java.util.HashMap">
 		   <if test="uList.size != 0">
 		   		INSERT INTO PAY_USER(
-		   		    PAY_U_UID,
 		   		    PAY_M_UID,
 		   		    U_UID) VALUES
 		   <foreach collection="uList" item="item" index="index" separator=",">		       
 		   			(
-		               (SELECT USER_GRID_H_UID.Nextval FROM DUAL),
 		   			   #{item.pay_m_uid},
 		   			   #{item.u_uid}
 		   			)
 		   </foreach>			
 		   </if>
 	</insert>
-	 -->
-	
+	 
+	<!--  oracle
 	<insert id="payUserUpdate" parameterType="java.util.HashMap">
 		   <if test="uList.size != 0">
 			   <foreach collection="uList" item="item" index="index" open="INSERT ALL " separator="" close="SELECT * FROM DUAL" >		       
@@ -113,6 +111,7 @@
 			   </foreach>			
 		   </if>
 	</insert>
+	 -->
 	
 	<select id="payoffUserList" parameterType="java.lang.String" resultType="com.spring.board.payoff.payoffUserDto">
 		SELECT A.*, B.NAME, B.RIDA

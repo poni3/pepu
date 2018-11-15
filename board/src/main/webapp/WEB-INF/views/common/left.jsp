@@ -36,7 +36,7 @@
           </li>
           <li><a href="payoffList"><i class="fa fa-edit"></i> 정산등록 </a>
           </li>
-          <li><a href="payoffmana"><i class="fa fa-desktop"></i> 정산관리 </a>          
+          <li><a href="paycalList"><i class="fa fa-desktop"></i> 정산관리 </a>          
           </li>
           
           

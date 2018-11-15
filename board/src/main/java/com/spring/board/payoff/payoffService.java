@@ -10,12 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.board.user.userDao;
-import com.spring.board.user.userDto;
 
 @Service
 public class payoffService {
-	
-	
 	
 	@Autowired
 	private payoffDao payoffDao;

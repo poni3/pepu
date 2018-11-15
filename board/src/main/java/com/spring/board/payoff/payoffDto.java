@@ -25,7 +25,7 @@ public class payoffDto {
 	private String fiv_place;
 	private int    fiv_amount;
 
-	//뒷풀이 몇차, 참석자수
+	
 	private int pay_user_count;
 	
 	public int getNo() {
