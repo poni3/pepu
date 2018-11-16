@@ -68,6 +68,16 @@ public class payoffController {
 		return view;
 	}
 	
+	@RequestMapping("/payoffOldUserGet")
+	public ModelAndView payoffOldUserGet(@RequestParam("pay_m_uid") String pay_m_uid) {
+		List<Object> userDtoList = payoffService.payoffOldUserGet(pay_m_uid);
+		ModelAndView view = new ModelAndView("jsonView", "list", userDtoList);
+		return view;
+	}
+	
+	
+	
+	
 	@RequestMapping("/payUserUpdate")
 	public ModelAndView payUserUpdate(@RequestParam("pay_m_uid") String pay_m_uid, @RequestParam("uids") String u_uids) throws Exception {
 		

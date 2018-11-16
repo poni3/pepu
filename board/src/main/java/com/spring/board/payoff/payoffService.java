@@ -51,7 +51,6 @@ public class payoffService {
 	}
 
 	public payoffDto payoffGetOne(String pay_m_uid) {
-		// TODO Auto-generated method stub
 		return payoffDao.payoffGetOne(pay_m_uid);
 	}
 
@@ -61,8 +60,11 @@ public class payoffService {
 	}
 
 	public List<Object> payoffUserGet(String pay_m_uid) {
-		// TODO Auto-generated method stub
 		return payoffDao.payoffUserGet(pay_m_uid);
+	}
+	
+	public List<Object> payoffOldUserGet(String pay_m_uid) {
+		return payoffDao.payoffOldUserGet(pay_m_uid);
 	}
 
 	public int payUserUpdate(String pay_m_uid, String u_uids) {

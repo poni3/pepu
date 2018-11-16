@@ -43,6 +43,11 @@ public class payoffDao {
 	public List<Object> payoffUserGet(String pay_m_uid) {
 		return sqlSession.selectList("payoffUserGet", pay_m_uid);
 	}
+	
+	public List<Object> payoffOldUserGet(String pay_m_uid) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("payoffOldUserGet", pay_m_uid);
+	}
 
 	public int payUserUpdate(Object put) {
 		return sqlSession.insert("payUserUpdate", put);
@@ -65,5 +70,7 @@ public class payoffDao {
 		// TODO Auto-generated method stub
 		return sqlSession.update("payoffCfmUpdate", param);
 	}
+
+	
 
 }

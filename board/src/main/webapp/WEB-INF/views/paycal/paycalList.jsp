@@ -18,7 +18,7 @@
           	<div class="col-md-12 col-sm-12 col-xs-12">
 			    <div class="x_panel">
 				    <div class="x_title">
-					    <h2>꿀 85 정산완료    </h2> 								
+					    <h2>정산관리    </h2> 								
 						<div class="clearfix"></div>
 					</div>
 
@@ -48,9 +48,9 @@
 											<c:forEach var="paycalList" items="${list}">
 											<tr>
 												<td><input type="checkbox" name="box" value="${paycalList.pay_m_uid}"></td>
-												<td class="ot_cd">${paycalList.status}</td>
+												<td>${paycalList.status}</td>
 												<td>${paycalList.pay_m_uid}</td>
-												<td>${paycalList.pay_title}</td>
+												<td class="payTitle" style="cursor:pointer;" >${paycalList.pay_title}</td>
 												<td>${paycalList.no}</td>
 												<td>${paycalList.pay_user_count}</td>
 												<td>${paycalList.reg_id}</td>
@@ -66,10 +66,7 @@
 	                   </div>
 			           <div class="col-md-6" align="right">
 				           <input type="button" class="btn btn-primary" onClick="search()" value="조회">
-				           <!-- <input type="button" data-toggle="modal" data-target="#myModal1" class="btn btn-success btn-sm"  value="등록"> -->
-				           <button type="button" data-toggle="modal" data-target="#myModal3" id="otorderp_sAdd" onClick="insertUser()"  class="btn btn-primary btn-sm" >등록</button>
-				          <!--  <input type="button" class="btn btn-primary" value="수정"> -->
-				           <input type="button" class="btn btn-primary" onClick="userDelete()" value="삭제">
+				            <button type="button" class="btn btn-primary btn-sm" id="paycalCfmCancel" >확정취소</button>
 				       </div>                    
                    </div>
                </div>
@@ -87,37 +84,33 @@
     <!-- add more js -->
     <!-- 새로작성한 javascript 문서는 여기에 추가하세요. -->
     <script>
+    
+    <!-- 정산 상세보기 -->
+	$('.payTitle').click(function(e) {
+		var pay_m_uid = $(this).prev().text();
+		
+		location.href='paycalEdit?pay_m_uid=' + pay_m_uid;
+	});	
+    
     function search(){
-    	location.href='userList';
+    	location.href='paycalList';
     }
     
-    function userDelete(){
-    	
-    	if( $(":checkbox[name='box']:checked").length == 0 ){
-		    alert("삭제 할 항목을 체크해주세요.");
-		    return false;
-		}
-    	
-    	var listArr = [];
-		$('input:checkbox[name="box"]').each(function(){
-			if(this.checked) {
-				listArr.push(this.value);
-			}
-		});
-    	
-    	location.href='userDelete?u_uids=' + listArr.join(',');
-    }
-    
-    
-    function insertUser(){
-    	$('#myModal1').modal('show');
-    }
-    
-    
-  //꿀85 등록
-	$('#userSubmit').click(function() {
-		$('#userForm').submit();
+    //정산 취소
+	$('#paycalCfmCancel').click(function(){
+		if (confirm("정말 확정하시겠습니까??") == true) {
+			var listArr = [];
+			$('input:checkbox[name="box"]').each(function() {
+				if(this.checked) {
+					listArr.push(this.value);
+				}
+			});
+			location.href='paycalCfmCancel?pay_m_uids='+listArr.join(',');		    
+		} else {
+			return;
+		}		
 	});
+    
     
     </script>
     

@@ -35,7 +35,7 @@ public class userController {
 		
 		userService.userDelete(u_uids);
 		
-		return userList();
+		return new ModelAndView("user/userMsg");
 	}
 	
 	@RequestMapping("/userInsert")
@@ -44,10 +44,10 @@ public class userController {
 		userService.userInsert(userdto);
 		
 		if(userdto.getRida() != 85) {
-			return oldUserList();
+			return new ModelAndView("user/oldUserMsg");
 		}
 		
-		return userList();
+		return new ModelAndView("user/userMsg");
 	}
 	
 	@RequestMapping("/oldUserList")
@@ -68,7 +68,7 @@ public class userController {
 		
 		userService.userDelete(u_uids);
 		
-		return oldUserList();
+		return new ModelAndView("user/oldUserMsg");
 	}
 	
 }

@@ -10,4 +10,17 @@
 	    ORDER BY REG_DATE DESC
 	</select>
 	
+	<update id="paycalCfmCancel" parameterType="java.util.HashMap">
+		UPDATE PAY_MASTER
+		   SET STATUS = 'ENT'
+		<choose>
+			<when test="uidList.size != 0">
+				WHERE PAY_M_UID IN
+					<foreach collection="uidList" item="item" index="index" separator="," open="(" close=")">
+						#{item}
+					</foreach>
+			</when>
+		</choose>
+	</update>
+	
 </mapper>

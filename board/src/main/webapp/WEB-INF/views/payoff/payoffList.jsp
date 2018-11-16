@@ -102,7 +102,8 @@
 								
 								<button type="button" data-toggle="modal" data-target="#myModal1" class="btn btn-success btn-sm">새 정산 등록</button>
 								<button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary btn-sm" id="payoffModify" disabled="disabled">수정</button>
-								<button type="button" data-toggle="modal" data-target="#myModal3" class="btn btn-primary btn-sm" id="payoffuserUpdate" disabled="disabled">사용자등록</button>
+								<button type="button" data-toggle="modal" data-target="#myModal3" class="btn btn-primary btn-sm" id="payoffuserUpdate" disabled="disabled">꿀85 등록</button>
+								<button type="button" data-toggle="modal" data-target="#myModal3" class="btn btn-primary btn-sm" id="payoffOldUserUpdate" disabled="disabled">뒷방 등록</button>
 								<button type="button" class="btn btn-danger btn-sm" id="payoffDelete" disabled="disabled">삭제</button>
 								<button type="button" class="btn btn-primary btn-sm" id="payoffCfmUpdate" >확정</button>
 							</div>
@@ -269,7 +270,7 @@
 	});
 	
 	
-	//정산  수정
+	//사용자등록
 	$('#payoffuserUpdate').click(function() {
 		$('input:checkbox[name="box"]').each(function() {
 			 $('#result_view').text('');
@@ -277,6 +278,36 @@
 				var temp = this.value;				
 				$.ajax({
 					url:'payoffUserGet?pay_m_uid='+temp,
+					method : 'get',
+					dataType : 'text',
+					error : function(data) {
+						alert(실패);						
+					},
+					success : function(responseData) {
+						var data = JSON.parse(responseData);
+						
+						for(var i =0; i < data.list.length; i++){
+							
+							var tableData = '<tr><td><input type="checkbox" name="u_box" value="' + data.list[i].u_uid + '"></td>'
+							                 + '<td>'+ data.list[i].name +'</td>'
+							                 + '<td>'+ data.list[i].rida +' 기</td></tr>';
+							                 
+							                 $('#result_view').append(tableData);
+						}
+					}			
+				});
+			}
+		});
+	});
+	
+	//사용자등록
+	$('#payoffOldUserUpdate').click(function() {
+		$('input:checkbox[name="box"]').each(function() {
+			 $('#result_view').text('');
+			if(this.checked){
+				var temp = this.value;				
+				$.ajax({
+					url:'payoffOldUserGet?pay_m_uid='+temp,
 					method : 'get',
 					dataType : 'text',
 					error : function(data) {
@@ -463,6 +494,7 @@
             $('input[name=box]').prop('checked',true);
             $('#payoffModify').attr('disabled',true);
             $('#payoffuserUpdate').attr('disabled',true);
+            $('#payoffOldUserUpdate').attr('disabled',true);
             $('#payoffDelete').attr('disabled',false);
         } else {
             $('input[name=box]').prop('checked',false);
@@ -476,14 +508,17 @@
 		if (count>1) {
 			$('#payoffModify').attr('disabled',true);
 			$('#payoffuserUpdate').attr('disabled',true);
+			$('#payoffOldUserUpdate').attr('disabled',true);
 			$('#payoffDelete').attr('disabled',false);
 		} else if (count===0) {
 			$('#payoffModify').attr('disabled',true);
 			$('#payoffuserUpdate').attr('disabled',true);
+			$('#payoffOldUserUpdate').attr('disabled',true);
 			$('#payoffDelete').attr('disabled',true);
 		} else {
 			$('#payoffModify').attr('disabled',false);
 			$('#payoffuserUpdate').attr('disabled',false);
+			$('#payoffOldUserUpdate').attr('disabled',false);
 			$('#payoffDelete').attr('disabled',false);			
 		}
 	});

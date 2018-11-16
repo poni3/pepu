@@ -6,6 +6,7 @@
 		SELECT A.*,
 	          (SELECT COUNT(1) FROM PAY_USER C WHERE C.PAY_M_UID = A.PAY_M_UID) AS PAY_USER_COUNT
 	    FROM PAY_MASTER A
+	    WHERE STATUS != 'CFM'
 	    ORDER BY REG_DATE DESC
 	</select>
 	
@@ -55,7 +56,6 @@
 	    WHERE PAY_M_UID = #{pay_m_uid}
 	</select>
 	
-	
 	<update id="payoffUpdate" parameterType="com.spring.board.payoff.payoffDto" >
 	  	 UPDATE PAY_MASTER
 		    SET PAY_TITLE   = #{pay_title},
@@ -78,6 +78,14 @@
 		SELECT A.*
 	      FROM T_USER A
 	      WHERE NOT EXISTS (SELECT 'O' FROM PAY_USER U WHERE U.PAY_M_UID = #{pay_m_uid} AND U.U_UID = A.U_UID )
+	      AND  A.RIDA = '85'
+	</select>
+	
+	<select id="payoffOldUserGet" parameterType="java.lang.String" resultType="com.spring.board.user.userDto">
+		SELECT A.*
+	      FROM T_USER A
+	      WHERE NOT EXISTS (SELECT 'O' FROM PAY_USER U WHERE U.PAY_M_UID = #{pay_m_uid} AND U.U_UID = A.U_UID )
+	      AND  A.RIDA != '85'
 	</select>
 	
 	<!-- mysql -->
@@ -114,11 +122,52 @@
 	 -->
 	
 	<select id="payoffUserList" parameterType="java.lang.String" resultType="com.spring.board.payoff.payoffUserDto">
-		SELECT A.*, B.NAME, B.RIDA
-	    FROM PAY_USER A, T_USER B
+		 SELECT  A.PAY_U_UID
+			    ,A.PAY_M_UID
+			    ,A.U_UID
+			    ,A.ONE_AMOUNT
+			    ,A.TWO_AMOUNT
+			    ,A.TRE_AMOUNT
+			    ,A.FOR_AMOUNT
+			    ,A.FIV_AMOUNT
+			    ,A.USER_TOTAL_AMOUNT
+			    ,A.REMARK
+			    , B.NAME
+			    , B.RIDA
+			    ,CASE WHEN ONE_MEAL ='ALL' THEN ''
+			         WHEN  ONE_MEAL ='MEL' THEN '안주'
+			         WHEN  ONE_MEAL ='COL' THEN '술만'
+			         WHEN  ONE_MEAL ='ANM' THEN '안먹(X)'
+			         ELSE 'NO'
+			         END AS ONE_MEAL
+			    ,CASE WHEN  TWO_MEAL ='ALL' THEN ''
+			         WHEN  TWO_MEAL ='MEL' THEN '안주'
+			         WHEN  TWO_MEAL ='COL' THEN '술만'
+			         WHEN  TWO_MEAL ='ANM' THEN '안먹(X)'
+			         ELSE 'NO'
+			         END AS TWO_MEAL
+			    ,CASE WHEN  TRE_MEAL ='ALL' THEN ''
+			         WHEN  TRE_MEAL ='MEL' THEN '안주'
+			         WHEN  TRE_MEAL ='COL' THEN '술만'
+			         WHEN  TRE_MEAL ='ANM' THEN '안먹(X)'
+			         ELSE '미참가'
+			         END AS TRE_MEAL
+			    ,CASE WHEN  FOR_MEAL ='ALL' THEN ''
+			         WHEN  FOR_MEAL ='MEL' THEN '안주'
+			         WHEN  FOR_MEAL ='COL' THEN '술만'
+			         WHEN  FOR_MEAL ='ANM' THEN '안먹(X)'
+			         ELSE '미참가'
+			         END AS FOR_MEAL
+			    ,CASE WHEN  FIV_MEAL ='ALL' THEN ''
+			         WHEN  FIV_MEAL ='MEL' THEN '안주'
+			         WHEN  FIV_MEAL ='COL' THEN '술만'
+			         WHEN  FIV_MEAL ='ANM' THEN '안먹(X)'
+			         ELSE '미참가'
+			         END AS FIV_MEAL
+        FROM PAY_USER A, T_USER B
 	    WHERE PAY_M_UID = #{pay_m_uid}
 	    AND  A.U_UID = B.U_UID
-	    ORDER BY FIV_MEAL, FOR_MEAL, TRE_MEAL, TWO_MEAL, ONE_MEAL, B.RIDA DESC
+	    ORDER BY FIV_MEAL, FOR_MEAL, TRE_MEAL, TWO_MEAL, ONE_MEAL DESC, RIDA DESC
 	</select>
 	
 	<update id="payoffUserStatusUpdate" parameterType="java.util.HashMap" >

@@ -1,6 +1,7 @@
 package com.spring.board.paycal;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,6 +18,10 @@ public class paycalDao {
 	
 	public List<payoffDto> getPaycalList() {
 		return sqlSession.selectList("paycalList");
+	}
+
+	public int paycalCfmCancel(Map<String, Object> param) {
+		return sqlSession.update("paycalCfmCancel", param);
 	}
 
 }

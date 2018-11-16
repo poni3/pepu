@@ -52,7 +52,9 @@
           </li> -->
           
           
-          <li><a href="estimateList.do"><i class="fa fa-bar-chart-o"></i> 정산통계 </a>            
+          <!-- <li><a href="alert(1)"><i class="fa fa-bar-chart-o"></i> 정산통계 </a> -->
+          <li onClick="alert('준비중')"><a href=""><i class="fa fa-bar-chart-o"></i> 정산통계 </a>
+                      
           </li>
           <!-- <li><a><i class="fa fa-clone"></i>작업 통계 <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
