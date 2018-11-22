@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,6 +36,9 @@ public class paycalCotroller {
 		List<Object> payoffUserDto = payoffService.payoffUserList(pay_m_uid);
 		payoffDto payoffDto      = payoffService.payoffGetOne(pay_m_uid);
 		
+		payoffUserDto = paycalService.addTotalAmount(payoffUserDto);	
+		
+		
 		return new ModelAndView("paycal/paycalEdit").addObject("paycalDto", payoffDto).addObject("list", payoffUserDto);
 	}
 	
@@ -46,6 +50,24 @@ public class paycalCotroller {
 		return new ModelAndView("paycal/paycalMsg");
 	}
 	
+	@RequestMapping("/paycalEditExcel")
+	public ModelAndView paycalEditExcel(@RequestParam("pay_m_uid") String pay_m_uid) {
+		
+		List<Object> payoffUserDto = payoffService.payoffUserList(pay_m_uid);
+		payoffDto payoffDto      = payoffService.payoffGetOne(pay_m_uid);
+		
+		payoffUserDto = paycalService.addTotalAmount(payoffUserDto);
+		
+		return new ModelAndView("paycal/paycalEditExcel").addObject("paycalDto", payoffDto).addObject("list", payoffUserDto).addObject("fileName", payoffDto.getPay_title());
+	}
 	
+	
+	@RequestMapping(value="/paycalAutoUpdate", method=RequestMethod.POST)
+	public ModelAndView paycalAutoUpdate(paycalDto paycalDto) throws Exception {
+			
+		paycalService.paycalAutoUpdate(paycalDto);
+		
+		return paycalEdit(paycalDto.getPay_m_uid()+"");
+	}
 	
 }

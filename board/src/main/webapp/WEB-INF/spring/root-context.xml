@@ -11,14 +11,28 @@
 	<context:component-scan base-package="com.spring.board" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
-	
+	<!-- 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:ORCL" />
 		<property name="username" value="test" />
 		<property name="password" value="1234" />
 	</bean>
-	
+	 -->
+	 
+	 <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes 2MB -->
+        <property name="maxUploadSize" value="2000000"/>
+    </bean>
+ 
+    <!-- Configure the file upload directory-->
+    <bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
+        <constructor-arg>
+            <value>C:/upload/</value>
+        </constructor-arg>
+    </bean>
+	 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:/mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource" />

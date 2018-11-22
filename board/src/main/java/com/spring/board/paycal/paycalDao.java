@@ -24,4 +24,12 @@ public class paycalDao {
 		return sqlSession.update("paycalCfmCancel", param);
 	}
 
+	public List<Map<String, Object>> getCount(paycalDto paycalDto) {
+		return sqlSession.selectList("getOneCount", paycalDto);
+	}
+
+	public int updateAmount(paycalDto paycalDto) {
+		return sqlSession.update("updateAmount", paycalDto);
+	}
+
 }

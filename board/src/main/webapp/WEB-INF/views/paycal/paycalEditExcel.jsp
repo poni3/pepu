@@ -1,28 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
-<jsp:include page="../common/header.jsp"></jsp:include>
-  <!-- add more css -->
-  <!-- 새로작성 css는 여기에 추가하세요. -->
-  <!-- /add more css -->
-  </head>	
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-		<jsp:include page="../common/left.jsp"></jsp:include>
-		<jsp:include page="../common/top_ngb.jsp"></jsp:include>
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="row">
-          
-          	<div class="col-md-12 col-sm-12 col-xs-12">
-			    <div class="x_panel">
-				    <div class="x_title">
-					    <h2>꿀 85 정산관리 상세    </h2> 								
-						<div class="clearfix"></div>
-					</div>
+<%@ page language="java" contentType="application/vnd.ms-excel; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+<% 
+  
+  String path = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+  
 
-					<br> 
+  String filename = (String)request.getAttribute("fileName");
+  response.setHeader("Content-Type", "application/vnd.ms-xls");
+  response.setHeader("Content-Disposition", "inline; filename=" + filename + ".xls");
+%>​ 
+</head>
+<body>
+	<div class="col-md-12 col-sm-12 col-xs-12">
+			    <div class="x_panel">
 					<div class="col-sm-12">
 						<div class="x_content">
 							
@@ -66,7 +60,6 @@
 							<table id="paycal" class="table table-striped table-bordered bulk_action">
 									<thead>
 										<tr>
-											<th><input type="checkbox" id="checkAll"></th>
 											<th>닉네임</th>
 											<c:forEach var="item" varStatus="i" begin="1" end="${paycalDto.no}" step="1">
 											       <th>${item} 차</th>
@@ -85,7 +78,6 @@
 										<c:if test="${!empty list}">
 											<c:forEach var="paycalList" items="${list}">
 											<tr>
-												<td><input type="checkbox" name="box" value="${paycalList.pay_u_uid}"></td>
 												<td>${paycalList.name}</td>
 												<td>${paycalList.one_amount}</td>
 												<td>${paycalList.one_meal}</td>
@@ -112,62 +104,21 @@
 										</c:if>
 									</tbody>
 								</table>
-	                    	</div>                    
-	                    <div class="col-md-6">
-	                       
-	                   </div>
-			           <div class="col-md-6" align="right">
-			           	   <button type="button" data-toggle="modal" data-target="#myModal1" class="btn btn-success ">자동 계산</button>
-				           <input type="button" class="btn btn-primary" onClick="location.href='paycalList'" value="닫기">
-				           <button type="button"  class="btn btn-primary" onclick="excelDown('${paycalDto.pay_m_uid}')">엑셀출력</button>
-				           <button type="button" data-toggle="modal" data-target="#myModal2"  class="btn btn-primary ">영수증 다운</button>
-				       </div>                    
+	                    	</div>   
+	                    	<br />
+	                    	<br />
+	                    	<c:forEach var="item" varStatus="i" begin="1" end="${paycalDto.no}" step="1">
+							   <img src="<%=path %>/board/upload/${paycalDto.pay_m_uid}_${item}_receipt.jpg" onerror="this.style.display=\'none\'" class="img-circle profile_img">
+								  <br />
+							</c:forEach>
+	                    	                 
                    </div>
                </div>
            </div>
         </div>
-        </div>
-        </div>
-        <!-- /page content -->       
-      </div>
-      <!-- /main_container -->
-      <jsp:include page="./autoUpdate.jsp"></jsp:include>
-      <jsp:include page="./paycalRecipt.jsp"></jsp:include>
-      <jsp:include page="../common/copyright.jsp"></jsp:include>
-    </div>
-    <!-- /container body -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>    
-	
-    <!-- add more js -->
-    <!-- 새로작성한 javascript 문서는 여기에 추가하세요. -->
-    <script>
-    
-    $( document ).ready(function() {
-    	var imgHtml  = '';
-  		var uid =  ${paycalDto.pay_m_uid};
-  		var no = ${paycalDto.no};
-  		
-  		for(var i = 1; i <= no;i++ ){
-  			imgHtml += '<a href="upload/' + uid + '_' + i + '_receipt.jpg" download><img style="width: 100%; object-fit: ReceiptImg;" src="upload/' + uid + '_' + i + '_receipt.jpg" onerror="this.style.display=\'none\'" /></a><br/>';
-  			
-  		}
-  		
-		$("#ReceiptImg").append(imgHtml);
-    });
-    
-  	//자동계산
-	$('#payoffAutoSubmit').click(function() {
-		$('#payoffAutoForm').submit();
-	});
-    
-  	
-  	function excelDown(pay_m_uid){
-  		location.href='paycalEditExcel?pay_m_uid=' + pay_m_uid;
-  	}
-    
-    </script>
-    
-    
-    <!-- /add more js -->
-	</body>
+
+
+
+
+</body>
 </html>

@@ -138,31 +138,31 @@
 			         WHEN  ONE_MEAL ='MEL' THEN '안주'
 			         WHEN  ONE_MEAL ='COL' THEN '술만'
 			         WHEN  ONE_MEAL ='ANM' THEN '안먹(X)'
-			         ELSE 'NO'
+			         ELSE '참여(X)'
 			         END AS ONE_MEAL
 			    ,CASE WHEN  TWO_MEAL ='ALL' THEN ''
 			         WHEN  TWO_MEAL ='MEL' THEN '안주'
 			         WHEN  TWO_MEAL ='COL' THEN '술만'
 			         WHEN  TWO_MEAL ='ANM' THEN '안먹(X)'
-			         ELSE 'NO'
+			         ELSE '참여(X)'
 			         END AS TWO_MEAL
 			    ,CASE WHEN  TRE_MEAL ='ALL' THEN ''
 			         WHEN  TRE_MEAL ='MEL' THEN '안주'
 			         WHEN  TRE_MEAL ='COL' THEN '술만'
 			         WHEN  TRE_MEAL ='ANM' THEN '안먹(X)'
-			         ELSE '미참가'
+			         ELSE '참여(X)'
 			         END AS TRE_MEAL
 			    ,CASE WHEN  FOR_MEAL ='ALL' THEN ''
 			         WHEN  FOR_MEAL ='MEL' THEN '안주'
 			         WHEN  FOR_MEAL ='COL' THEN '술만'
 			         WHEN  FOR_MEAL ='ANM' THEN '안먹(X)'
-			         ELSE '미참가'
+			         ELSE '참여(X)'
 			         END AS FOR_MEAL
 			    ,CASE WHEN  FIV_MEAL ='ALL' THEN ''
 			         WHEN  FIV_MEAL ='MEL' THEN '안주'
 			         WHEN  FIV_MEAL ='COL' THEN '술만'
 			         WHEN  FIV_MEAL ='ANM' THEN '안먹(X)'
-			         ELSE '미참가'
+			         ELSE '참여(X)'
 			         END AS FIV_MEAL
         FROM PAY_USER A, T_USER B
 	    WHERE PAY_M_UID = #{pay_m_uid}

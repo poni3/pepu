@@ -4,6 +4,12 @@
 <jsp:include page="../common/header.jsp"></jsp:include>
 <!-- add more css -->
 <!-- 새로작성 css는 여기에 추가하세요. -->
+
+ <%
+    ServletContext context = request.getServletContext();
+    String path = context.getRealPath("/") + "upload";
+    
+    %>
 <style>
 .left_zero {
 	padding-left : 0;
@@ -50,6 +56,7 @@
 												<option>검색</option>
 												<option>정산명</option>
 											</select>
+											<input type="hidden" id="realPath" name="realPath"  value="<%=path %>" >
 										</div><!-- 셀렉트박스 END -->
 										<!-- 검색폼 START -->
 										<div class="col-md-4" style="padding-left: 0">
@@ -131,7 +138,7 @@
 										       <option value="5">5차</option>
 										     </select>
 										</div>
-									</div>								
+									</div>					
 								</form>
 								
 								<!-- <form class="form-horizontal form-label-left">
@@ -171,8 +178,9 @@
 								<button type="button" id="otorderp_sModify" class="btn btn-primary btn-sm"  onClick="updateMeal('')"    >미참가</button>
 								
 								<button type="button" id="otorderp_sModify" class="btn btn-primary btn-sm" disabled="disabled">수정</button>
-								<button type="button" id="payoffUsersDelete" class="btn btn-primary btn-sm" >삭제</button>
+								<button type="button" id="payoffUsersDelete" class="btn btn-danger btn-sm" >삭제</button>
 
+                                <button type="button" data-toggle="modal" data-target="#myModal4" id="payoffReceipt" class="btn btn-success btn-sm" >영수증 등록</button>	
 							</div>
 						</div>
 					</div>
@@ -187,6 +195,7 @@
 		<jsp:include page="./payoffInsert.jsp"></jsp:include>
 		<jsp:include page="./placeUpdate.jsp"></jsp:include>
 		<jsp:include page="./userUpdate.jsp"></jsp:include>
+		<jsp:include page="./payoffRecipt.jsp"></jsp:include>
 		<jsp:include page="../common/copyright.jsp"></jsp:include>
 	</div>
 	<!-- /container body -->
@@ -194,7 +203,7 @@
 	<!-- add more js -->
 	<!-- 새로작성한 javascript 문서는 여기에 추가하세요. -->
 	<script>
-
+	
 	//정산등록
 	$('#payoffSubmit').click(function() {
 		$('#payoffForm').submit();
@@ -521,6 +530,55 @@
 			$('#payoffOldUserUpdate').attr('disabled',false);
 			$('#payoffDelete').attr('disabled',false);			
 		}
+	});
+	
+	
+	//영수증 등록
+	$('#payoffReceipt').click(function(){
+		
+		var user_no = $("#user_no").val();
+		if(user_no == ''){
+			alert('차수를 선택해 주세요.');
+			return false;
+		}
+		
+		var uids = [];
+		var pay_m_uid = $("#pay_m_uid_trans").text();
+		
+		if(pay_m_uid == '' || pay_m_uid == '정산번호'){
+			alert('데이터 설정이 잘 못 되었습니다.');
+			return false;
+		}
+		
+		//업로드창 이름설정
+		$("#receiptTitle").text($("#user_title").text());
+		//업로드창 차수 설정
+		$("#ReceiptNo").text(user_no);
+		
+		$("#Receipt_m_uid").val(pay_m_uid);
+		$("#Receipt_no").val(user_no);
+		
+		//업로드 패스 설정
+		$("#Receipt_path").val($("#realPath").val());
+		
+		//img뿌리기
+		//<img style="width: 100%; object-fit: ReceiptImg;" src="images/cropper.jpg" />
+		
+		$("#ReceiptImg").text('');
+		
+		var imgHtml = '<img style="width: 100%; object-fit: ReceiptImg;" src="upload/' + pay_m_uid + '_' + user_no + '_receipt.jpg" onerror="this.style.display=\'none\'" />';
+			$("#ReceiptImg").append(imgHtml);
+	});
+	
+	//영수증등록
+	$('#ReceiptSubmit').click(function() {
+		$('#ReceiptForm').submit();
+	});
+	//영수증 취소
+	$('#ReceiptCancle').click(function() {
+		$('#ReceiptForm').each(function() {
+			this.reset();
+		});
 	});
 	</script>
 	<!-- /add more js -->

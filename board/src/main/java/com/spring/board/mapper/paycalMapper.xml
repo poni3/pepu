@@ -2,6 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="paycal">
+
+	<sql id="updateOne">
+	  SET ONE_AMOUNT = CASE WHEN ONE_MEAL = 'ALL' THEN #{one_anju} + #{one_alcol}
+		                         WHEN ONE_MEAL = 'COL' THEN #{one_alcol}
+		                         WHEN ONE_MEAL = 'MEL' THEN #{one_anju}
+		                         ELSE
+		                          0
+		                         END
+	</sql>
+	
+	<sql id="updateTwo">
+	  ,TWO_AMOUNT = CASE WHEN TWO_MEAL = 'ALL' THEN #{two_anju} + #{two_alcol}
+		                         WHEN TWO_MEAL = 'COL' THEN #{two_alcol}
+		                         WHEN TWO_MEAL = 'MEL' THEN #{two_anju}
+		                         ELSE
+		                          0
+		                         END
+	</sql>
+	
+	<sql id="updateTre">
+	  ,TRE_AMOUNT = CASE WHEN TRE_MEAL = 'ALL' THEN #{tre_anju} + #{tre_alcol}
+		                         WHEN TRE_MEAL = 'COL' THEN #{tre_alcol}
+		                         WHEN TRE_MEAL = 'MEL' THEN #{tre_anju}
+		                         ELSE
+		                          0
+		                         END
+	</sql>
+	
+	<sql id="updateFor">
+	   ,FOR_AMOUNT = CASE WHEN FOR_MEAL = 'ALL' THEN #{for_anju} + #{for_alcol}
+		                         WHEN FOR_MEAL = 'COL' THEN #{for_alcol}
+		                         WHEN FOR_MEAL = 'MEL' THEN #{for_anju}
+		                         ELSE
+		                          0
+		                         END
+	</sql>
+	
+	<sql id="updateFiv">
+	  ,FIV_AMOUNT = CASE WHEN FIV_MEAL = 'ALL' THEN #{fiv_anju} + #{fiv_alcol}
+		                         WHEN FIV_MEAL = 'COL' THEN #{fiv_alcol}
+		                         WHEN FIV_MEAL = 'MEL' THEN #{fiv_anju}
+		                         ELSE
+		                          0
+		                         END
+	</sql>	
+
 	<select id="paycalList" resultType="com.spring.board.payoff.payoffDto">
 		SELECT A.*,
 	          (SELECT COUNT(1) FROM PAY_USER C WHERE C.PAY_M_UID = A.PAY_M_UID) AS PAY_USER_COUNT
@@ -21,6 +67,128 @@
 					</foreach>
 			</when>
 		</choose>
+	</update>
+	
+	<select id="getOneCount" parameterType="com.spring.board.paycal.paycalDto" resultType="java.util.HashMap">
+		SELECT COUNT(1) AS CO
+			<choose>
+				<when test="'ONE'.equals(type)">
+					 ,COALESCE(ONE_MEAL, '') AS CODE
+				</when>
+				<when test="'TWO'.equals(type)">
+					 ,COALESCE(TWO_MEAL, '') AS CODE
+				</when>
+				<when test="'TRE'.equals(type)">
+					 ,COALESCE(TRE_MEAL, '') AS CODE
+				</when>
+				<when test="'FOR'.equals(type)">
+					 ,COALESCE(FOR_MEAL, '') AS CODE
+				</when>
+				<when test="'FIV'.equals(type)">
+					 ,COALESCE(FIV_MEAL, '') AS CODE
+				</when>
+			</choose>   
+		      
+		FROM  PAY_USER
+		WHERE PAY_M_UID = #{pay_m_uid}
+		GROUP BY  
+			<choose>
+				<when test="'ONE'.equals(type)">
+					 ONE_MEAL
+				</when>
+				<when test="'TWO'.equals(type)">
+					 TWO_MEAL
+				</when>
+				<when test="'TRE'.equals(type)">
+					 TRE_MEAL
+				</when>
+				<when test="'FOR'.equals(type)">
+					 FOR_MEAL
+				</when>
+				<when test="'FIV'.equals(type)">
+					 FIV_MEAL
+				</when>
+			</choose>
+	</select>
+	<!-- 
+	<update id="updateAmount" parameterType="com.spring.board.paycal.paycalDto">
+		UPDATE PAY_USER
+		 <choose>
+			<when test="'ONE'.equals(type)">
+				SET ONE_AMOUNT = CASE WHEN ONE_MEAL = 'ALL' THEN #{one_anju} + #{one_alcol}
+		                         WHEN ONE_MEAL = 'COL' THEN #{one_alcol}
+		                         WHEN ONE_MEAL = 'MEL' THEN #{one_anju}
+		                         ELSE
+		                          0
+		                         END
+			</when>
+			<when test="'TWO'.equals(type)">
+				SET TWO_AMOUNT = CASE WHEN TWO_MEAL = 'ALL' THEN #{two_anju} + #{two_alcol}
+		                         WHEN TWO_MEAL = 'COL' THEN #{two_alcol}
+		                         WHEN TWO_MEAL = 'MEL' THEN #{two_anju}
+		                         ELSE
+		                          0
+		                         END
+			</when>
+			<when test="'TRE'.equals(type)">
+				SET TRE_AMOUNT = CASE WHEN TRE_MEAL = 'ALL' THEN #{tre_anju} + #{tre_alcol}
+		                         WHEN TRE_MEAL = 'COL' THEN #{tre_alcol}
+		                         WHEN TRE_MEAL = 'MEL' THEN #{tre_anju}
+		                         ELSE
+		                          0
+		                         END
+			</when>
+			<when test="'FOR'.equals(type)">
+				SET FOR_AMOUNT = CASE WHEN FOR_MEAL = 'ALL' THEN #{for_anju} + #{for_alcol}
+		                         WHEN FOR_MEAL = 'COL' THEN #{for_alcol}
+		                         WHEN FOR_MEAL = 'MEL' THEN #{for_anju}
+		                         ELSE
+		                          0
+		                         END
+			</when>
+			<when test="'FIV'.equals(type)">
+				SET FIV_AMOUNT = CASE WHEN FIV_MEAL = 'ALL' THEN #{fiv_anju} + #{fiv_alcol}
+		                         WHEN FIV_MEAL = 'COL' THEN #{fiv_alcol}
+		                         WHEN FIV_MEAL = 'MEL' THEN #{fiv_anju}
+		                         ELSE
+		                          0
+		                         END
+			</when>
+		</choose>                         
+		WHERE PAY_M_UID = #{pay_m_uid}
+	</update> -->
+	
+	<update id="updateAmount" parameterType="com.spring.board.paycal.paycalDto">
+		UPDATE PAY_USER
+		 <choose>
+			<when test="'ONE'.equals(type)">
+				<include refid="updateOne"/>
+			</when>
+			<when test="'TWO'.equals(type)">
+				<include refid="updateOne"/>
+				<include refid="updateTwo"/>
+			</when>
+			<when test="'TRE'.equals(type)">
+				<include refid="updateOne"/>
+				<include refid="updateTwo"/>
+				<include refid="updateTre"/>
+			</when>
+			<when test="'FOR'.equals(type)">
+				<include refid="updateOne"/>
+				<include refid="updateTwo"/>
+				<include refid="updateTre"/>
+				<include refid="updateFor"/>
+			</when>
+			<when test="'FIV'.equals(type)">
+				<include refid="updateOne"/>
+				<include refid="updateTwo"/>
+				<include refid="updateTre"/>
+				<include refid="updateFor"/>
+				<include refid="updateFiv"/>
+			</when>
+		</choose>
+			,USER_TOTAL_AMOUNT =   COALESCE(ONE_AMOUNT, 0) + COALESCE(TWO_AMOUNT, 0) + COALESCE(TRE_AMOUNT, 0) + COALESCE(FOR_AMOUNT, 0) + COALESCE(FIV_AMOUNT, 0)                       
+		WHERE PAY_M_UID = #{pay_m_uid}
 	</update>
 	
 </mapper>
