@@ -14,7 +14,6 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<!-- aop 자동 스캔 -->
 	<aop:aspectj-autoproxy/>
 	
 	<!-- 
@@ -38,7 +37,7 @@
             <value>C:/upload/</value>
         </constructor-arg>
     </bean>
-   
+    
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:/mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource" />

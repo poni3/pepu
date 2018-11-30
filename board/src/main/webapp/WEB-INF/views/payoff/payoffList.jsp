@@ -131,11 +131,11 @@
 		                                <div class="col-md-4 col-sm-4 col-xs-12">
 											 <select name="user_no" class="form-control" id="user_no" >
 										       <option value="">차수</option>
-										       <option value="1">1차</option>
+										       <!-- <option value="1">1차</option>
 										       <option value="2">2차</option>
 										       <option value="3">3차</option>
 										       <option value="4">4차</option>
-										       <option value="5">5차</option>
+										       <option value="5">5차</option> -->
 										     </select>
 										</div>
 									</div>					
@@ -368,6 +368,16 @@
 		$('#pay_m_uid_trans').text(pay_m_uid);
 		 $("#user_no").val('');
 		
+		 
+		//select box 차수 세팅
+  		$("#user_no").find("option").remove().end().append("<option value=''>차수</option>");
+  		
+		for(var i =1; i <= $(this).next().next().next().text(); i ++) {
+			$("#user_no").append("<option value='" + i + "'>"+i +" 차" + "</option>")
+		}
+  		
+		 
+		 
 		editUserAjax(pay_m_uid);
 	});	
 	
