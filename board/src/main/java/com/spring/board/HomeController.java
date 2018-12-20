@@ -29,4 +29,12 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping(value = "/login_check", method = RequestMethod.POST)
+	public String login(Locale locale, Model model) throws Exception {
+		//List<mainTest> mainList = mainservice.getTestList();
+		  
+		return "index";
+		
+	}
+	
 }

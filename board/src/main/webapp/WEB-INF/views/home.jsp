@@ -1,68 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>꿀85 정산 System Login </title>
-
-    <!-- Bootstrap -->
-    <link href="vendors/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="vendors/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- Animate.css -->
-    <link href="vendors/css/animate.min.css" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="build/css/custom.min.css" rel="stylesheet">
-  </head>
- <body class="login">
-    <div>
-      <a class="hiddenanchor" id="signup"></a>
-      <a class="hiddenanchor" id="signin"></a>
-
-      <div class="login_wrapper">
-        <div class="animate form login_form">
-          <section class="login_content">
-            <!-- <form name="login" action="login.do"> -->
-            <form name="login" action="index">
-              <h1>System Login</h1>
-              <div>
-                <input type="text" class="form-control" name="userid" placeholder="Username"/>
-                <!-- <input type="text" class="form-control" name="userid" placeholder="Username" required="required"/> -->
-              </div>
-              <div>
-                <input type="password" class="form-control" name="userpwd" placeholder="Password"/>
-                <!-- <input type="password" class="form-control" name="userpwd" placeholder="Password" required="required"/> -->
-              </div>
-              <div>
-              	<button type="submit" class="btn btn-default submit">Log in</button>
-                <!-- <a class="btn btn-default submit" href="index.do">Log in</a> -->
-              </div>
-
-              <div class="clearfix"></div>
-
-              <div class="separator">
-
-                <div class="clearfix"></div>
-                <br/>
-                <div>
-                  <h1><i class="fa fa-paw"></i> 꿀85 정산 System!</h1>
-                  <p>©2018 All Rights Reserved. </p>
-                </div>
-              </div>
-            </form>
-          </section>
+    <title>꿀85 Login</title>
+    <link rel="stylesheet" href="vendors/ryan/style.css">
+</head>
+<body>
+    <form id="login" method="post" action="login_check" >
+        <svg id="ryan" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,150 C0,65 120,65 120,150" fill="#e0a243" stroke="#000" stroke-width="2.5" />
+            <g class="ears">
+                <path d="M46,32 L46,30 C46,16 26,16 26,30 L26,32" fill="#e0a243" stroke="#000" stroke-width="2.5" stroke-linecap="round" transform="rotate(-10,38,24)" />
+                <path d="M74,32 L74,30 C74,16 94,16 94,30 L94,32" fill="#e0a243" stroke="#000" stroke-width="2.5" stroke-linecap="round" transform="rotate(10,82,24)" />
+            </g>
+            <circle cx="60" cy="60" r="40" fill="#e0a243" stroke="#000" stroke-width="2.5" />
+            <g class="eyes">
+                <!-- left eye and eyebrow-->
+                <line x1="37" x2="50" y1="46" y2="46" stroke="#000" stroke-width="3" stroke-linecap="round" />
+                <circle cx="44" cy="55" r="3" fill="#000" />
+                <!-- right eye and eyebrow -->
+                <line x1="70" x2="83" y1="46" y2="46" stroke="#000" stroke-width="3" stroke-linecap="round" />
+                <circle cx="76" cy="55" r="3" fill="#000" />
+            </g>
+            <g class="muzzle">
+                <path d="M60,66 C58.5,61 49,63 49,69 C49,75 58,77 60,71 M60,66 C61.5,61 71,63 71,69 C71,75 62,77 60,71" fill="#fff" />
+                <path d="M60,66 C58.5,61 49,63 49,69 C49,75 58,77 60,71 M60,66 C61.5,61 71,63 71,69 C71,75 62,77 60,71" fill="#fff" stroke="#000" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+                <polygon points="59,63.5,60,63.4,61,63.5,60,65" fill="#000" stroke="#000" stroke-width="5" stroke-linejoin="round" />
+            </g>
+            <path d="M40,105 C10,140 110,140 80,105 L80,105 L70,111 L60,105 L50,111 L40,105" fill="#fff" />
+        </svg>
+        <input type="text" placeholder="이름을 입력해주세요" name="member_name">
+        <input type="password" placeholder="비밀번호" name="member_passwd">
+        <div style="text-align: center;">
+        	<input type="submit" class="btn btn-warning"  style="color: #CCCCOO; width:100%;" value="로그인 하기"></input>
         </div>
-      </div>
-	</div>
-
-  </body>
+    </form>
+    <script src="vendors/ryan/script.js"></script>
+</body>
 </html>
